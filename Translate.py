@@ -5,6 +5,7 @@ import re
 from integrate import integrate
 from partial import partial
 from frac import frac
+from convert_integer import convert_integer
 
 class TexInput:
     def __init__(self, origin):
@@ -37,6 +38,7 @@ class TexInput:
         for function in order_of_function:
             if function in self.set_of_tex:
                 directory_of_function[function](self)
+        convert_integer(self)
         return self.origin
  
 if __name__ == '__main__':
