@@ -1,0 +1,2 @@
+def partial(object):
+    pass

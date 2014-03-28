@@ -1,0 +1,7 @@
+This is just a try to parse tex expression to sympy expression.
+
+At the moment, there is no special method but translating functions one by one. 
+The main script is Translate.py. Others define functions the script uses, which 
+thus can be easily modified to parse other lanuages(maybe?)..
+
+Please forgive me for my poor Python skills...
