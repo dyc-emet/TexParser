@@ -6,6 +6,7 @@ from integrate import integrate
 from partial import partial
 from frac import frac
 from convert_integer import convert_integer
+from mul_integer_symbol import mul_integer_symbol
 
 class TexInput:
     def __init__(self, origin):
@@ -38,11 +39,12 @@ class TexInput:
         for function in order_of_function:
             if function in self.set_of_tex:
                 directory_of_function[function](self)
+        mul_integer_symbol(self)
         convert_integer(self)
         return self.origin
  
 if __name__ == '__main__':
     #origin = input()
-    origin = '\\frac{a + \\int^{2 * Pi}_{0.2} \\int_{(a + 2) * 3}^4 x dy dx}{\\int^{2 * Pi}_0 theta dtheta} + \\frac{1}{2}'
+    origin = '\\frac{a + \\int^{2 Pi}_{0.2} \\int_{(a + 2) * 3}^4 x dy dx}{\\int^{2 * Pi}_0 theta dtheta} + \\frac{1}{2}'
     texinput = TexInput(origin)
     print(texinput.translate())
