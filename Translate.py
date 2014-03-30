@@ -2,6 +2,7 @@
 
 import re
 
+from standardize import standardize
 from integrate import integrate
 from partial import partial
 from frac import frac
@@ -36,6 +37,9 @@ class TexInput:
     def translate(self):
         order_of_function = ['\\frac', '\\int', '\\partial']  #The order is very important!, which still needs more consideration
         directory_of_function = {'\\frac' : frac, '\\int' : integrate, '\\partial' : partial}
+        print(self.origin)
+        standardize(self)
+        print(self.origin)
         for function in order_of_function:
             if function in self.set_of_tex:
                 directory_of_function[function](self)
@@ -45,6 +49,6 @@ class TexInput:
  
 if __name__ == '__main__':
     #origin = input()
-    origin = '\\frac{a + \\int^{2 Pi}_{0.2} \\int_{(a + 2) * 3}^4 x dy dx}{\\int^{2 * Pi}_0 theta dtheta} + \\frac{1}{2}'
+    origin = '\\frac{a +  \\int^{2 Pi}_{0.2} \\int_{(a +  2) * 3}^4 x dy dx}{\\int^{2 * Pi}_0 theta dtheta} + \\frac{1}{2}'
     texinput = TexInput(origin)
     print(texinput.translate())
