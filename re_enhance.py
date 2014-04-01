@@ -65,8 +65,53 @@ def re_bracket_balance(pattern, string):
     #print(string)
     return re.search(pattern, string)
 
+def one_or_bracket(pattern, string):
+    bracket_list = ['(', '[', '{']
+    balance_need_searched = re.search(r'\(\.\.\.\)', pattern)
+    while balance_need_searched:
+        pattern_origin = pattern
+        string_to_change_pattern = string
+        begin_of_balance_in_pattern = balance_need_searched.span()[0]
+        end_of_balance_in_pattern = balance_need_searched.span()[1]
+        #print(balance_need_searched.group(0))
+        #print(begin_of_balance_in_pattern)
+        #print(end_of_balance_in_pattern)
+        string_before_balance_in_pattern = pattern[:begin_of_balance_in_pattern]
+        string_searched = re.search(string_before_balance_in_pattern, string_to_change_pattern)
+        while string_searched:
+            begin_of_balance_in_string = string_searched.span()[1]
+            if string_to_change_pattern[begin_of_balance_in_string] in bracket_list:
+                result, string_after_balance_in_string = bracket_balance(string[begin_of_balance_in_string:])
+                #print(result)
+                #end_of_balance_in_string = begin_of_balance_in_string + len(result)
+                result = transform_origin_to_regx(result)
+                #print(result)
+                pattern = pattern[:begin_of_balance_in_pattern] + result + pattern[end_of_balance_in_pattern:]
+                #print(pattern)
+                break
+            elif string_to_change_pattern[begin_of_balance_in_string] == ' ':
+                one_pattern_string = string_to_change_pattern[begin_of_balance_in_string:]
+                one_pattern_matched = re.match(r' [a-zA-Z0-9]+ *', one_pattern_string)
+                if one_pattern_matched:
+                    result = one_pattern_matched.group(0)
+                    pattern = pattern[:begin_of_balance_in_pattern] + result + pattern[end_of_balance_in_pattern:]
+                    break
+            else:
+                string_to_change_pattern = string_to_change_pattern[begin_of_balance_in_string:]
+                string_searched = re.search(string_before_balance_in_pattern, string_to_change_pattern)
+        #print(pattern)
+        if pattern == pattern_origin:
+            return None
+        balance_need_searched = re.search(r'\(\.\.\.\)', pattern)
+    #print(pattern)
+    #print(string)
+    return re.search(pattern, string)
+
 if __name__ == '__main__':
     line = '\\partial^{2.3} x / \\partial x^{2}'
     line_searched = re_bracket_balance(r'\\partial\^(...).*?/ \\partial', line)
+    line_one_searched = one_or_bracket(r'\\partial\^(...)(...)/ \\partial(...)', line)
     if line_searched:
         print(line_searched.group(0))
+    if line_one_searched:
+        print(line_one_searched.group(0))
